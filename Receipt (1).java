@@ -8,13 +8,17 @@ public class Receipt extends JFrame implements ActionListener {
     private String date;
     private String time;
     private int adultQty;
+    private int childrenQty;
+    private double depositAmount;
 
-    public Receipt(String selectedBookingType, String selectedDay, String selectedDate, String selectedTime, int adultQty) {
+    public Receipt(String selectedBookingType, String selectedDay, String selectedDate, String selectedTime, int adultQty, int childrenQty, double depositAmount) {
         this.bookingType = selectedBookingType;
         this.day = selectedDay;
         this.date = selectedDate;
         this.time = selectedTime;
         this.adultQty = adultQty;
+        this.childrenQty = childrenQty;
+        this.depositAmount = depositAmount;
 
         JTextArea receiptTextArea = new JTextArea();
         receiptTextArea.setEditable(false);
@@ -24,8 +28,10 @@ public class Receipt extends JFrame implements ActionListener {
                 " Day                   : " + selectedDay + "\n\n" +
                 " Date                 : " + selectedDate + "\n\n" +
                 " Time                 : " + selectedTime + "\n\n" +
-                " Adults               : " + adultQty + "\n\n\n" +
-                " Thank you for booking with Purnama Palace Dine & Tea!"
+                " Adults               : " + adultQty + "\n\n" +
+                " Children             : " + childrenQty + "\n\n" +
+                " Deposit             : RM" + depositAmount + "\n\n\n" +
+                " Thank you for booking with PURNAMA PALACE DINE & TEA!"
         );
 
         JScrollPane scrollPane = new JScrollPane(receiptTextArea);
