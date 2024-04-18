@@ -13,18 +13,19 @@ public class WelcomePage extends JFrame implements ActionListener {
     public WelcomePage() 
     { 
         //Create a tittle for cinema 
-        setTitle("WELCOME TO PURNAMA PALACE DINE  "); 
+        setTitle("PURNAMA PALACE DINE & TEA "); 
         setSize(500, 500); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         setLocationRelativeTo(null); 
         
+
         //Create a Panel 
         JPanel panel = new JPanel(); 
         panel.setLayout(new BorderLayout()); 
         add(panel); 
 
         //Create Label 
-        JLabel label = new JLabel("WELCOME TO PURNAMA PALACE DINE  ",  SwingConstants.CENTER); 
+        JLabel label = new JLabel("WELCOME TO PURNAMA PALACE DINE & TEA  ",  SwingConstants.CENTER); 
         label.setFont(new Font("ALGERIAN", Font.BOLD, 22)); 
         panel.add(label, BorderLayout.CENTER); 
 
@@ -44,7 +45,7 @@ public class WelcomePage extends JFrame implements ActionListener {
     { 
         if (e.getSource() == startButton) { 
             dispose(); 
-            new BookingPage(); 
+            new BookingPage();  
         }//end of if 
     }//end of method 
     
@@ -53,4 +54,5 @@ public class WelcomePage extends JFrame implements ActionListener {
         WelcomePage wp = new WelcomePage (); 
     }//end of the main
 }
+
 
