@@ -4,67 +4,62 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 public class BookingPage implements ActionListener {
-    // Declaration Variables
     private JFrame frame;
-    private JComboBox<String> bookingTypesBox, dinnerBox, daysBox, datesBox, timeBox;
-    private JCheckBox chkAdult, chkChild;
-    private JTextField peopleField;
+    private JComboBox<String> bookingTypesBox, daysBox, datesBox, timeBox;
+    private JTextField adultsField, childrenField, depositField;
     private JButton btnNext;
     private String time = "";
-    private String selectedMenu = "";
-    int qtyAdult = 0, qtyChildren = 0;
 
     public BookingPage() {
         String[] bookingTypes = {"Dinner", "High-Tea"};
-        String[] dinners = {"SINGLE", "COUPLE", "SMALL FAMILY", "BIG FAMILY"};
         String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
         String[] dates = {"April 27, 2024", "April 28, 2024", "April 29, 2024", "May 3, 2024", "May 4, 2024", "May 5, 2024"}; // Sample dates
         String[] dinnerTimes = {"7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM"};
         String[] highTeaTimes = {"3:00 PM", "4:00 PM", "5:00 PM"};
 
         bookingTypesBox = new JComboBox<>(bookingTypes);
-        dinnerBox = new JComboBox<>(dinners);
         daysBox = new JComboBox<>(days);
         datesBox = new JComboBox<>(dates);
         timeBox = new JComboBox<>();
 
-        // PANEL BOOKING TYPES
         JPanel panelBookingTypes = new JPanel();
         panelBookingTypes.setLayout(new GridLayout(1, 0));
         panelBookingTypes.setBorder(BorderFactory.createTitledBorder("Select Booking Type"));
         panelBookingTypes.add(bookingTypesBox);
 
-        // PANEL DAY
         JPanel panelDay = new JPanel();
         panelDay.setLayout(new GridLayout(1, 0));
         panelDay.setBorder(BorderFactory.createTitledBorder("Choose Day"));
         panelDay.add(daysBox);
 
-        // PANEL DATE
         JPanel panelDates = new JPanel();
         panelDates.setLayout(new GridLayout(1, 0));
         panelDates.setBorder(BorderFactory.createTitledBorder("Choose Date"));
         panelDates.add(datesBox);
 
-        // PANEL TIME
         JPanel panelTime = new JPanel();
         panelTime.setLayout(new GridLayout(1, 0));
         panelTime.setBorder(BorderFactory.createTitledBorder("Choose Time"));
         panelTime.add(timeBox);
 
-        // PANEL RESERVATION
         JPanel panelReservation = new JPanel();
-        panelReservation.setLayout(new GridLayout(1, 0));
-        panelReservation.setBorder(BorderFactory.createTitledBorder("Enter Amount of People"));
-        JLabel peopleLabel = new JLabel("Number of Adults:");
-        peopleField = new JTextField();
-        panelReservation.add(peopleLabel);
-        panelReservation.add(peopleField);
+        panelReservation.setLayout(new GridLayout(3, 2)); // Changed to 3 rows for adults, children, and deposit
+        panelReservation.setBorder(BorderFactory.createTitledBorder("Enter Amount of People & Deposit")); // Updated title
+        JLabel adultsLabel = new JLabel("Number of Adults:");
+        adultsField = new JTextField();
+        JLabel childrenLabel = new JLabel("Number of Children:");
+        childrenField = new JTextField();
+        JLabel depositLabel = new JLabel("Deposit:");
+        depositField = new JTextField();
+        panelReservation.add(adultsLabel);
+        panelReservation.add(adultsField);
+        panelReservation.add(childrenLabel);
+        panelReservation.add(childrenField);
+        panelReservation.add(depositLabel); // Added deposit label and field
+        panelReservation.add(depositField);
 
-        // NEXT BUTTON
         btnNext = new JButton("NEXT");
 
-        // FRAME
         frame = new JFrame();
         frame.setTitle("Booking Page");
         frame.setSize(520, 400);
@@ -79,22 +74,21 @@ public class BookingPage implements ActionListener {
         frame.add(panelReservation);
         frame.add(btnNext);
 
-        // REGISTER LISTENER
         bookingTypesBox.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    String selectedBookingType = (String) bookingTypesBox.getSelectedItem();
-                    timeBox.removeAllItems();
-                    if (selectedBookingType.equals("Dinner")) {
-                        for (String time : dinnerTimes) {
-                            timeBox.addItem(time);
-                        }
-                    } else if (selectedBookingType.equals("High-Tea")) {
-                        for (String time : highTeaTimes) {
-                            timeBox.addItem(time);
-                        }
+            public void actionPerformed(ActionEvent e) {
+                String selectedBookingType = (String) bookingTypesBox.getSelectedItem();
+                timeBox.removeAllItems();
+                if (selectedBookingType.equals("Dinner")) {
+                    for (String time : dinnerTimes) {
+                        timeBox.addItem(time);
+                    }
+                } else if (selectedBookingType.equals("High-Tea")) {
+                    for (String time : highTeaTimes) {
+                        timeBox.addItem(time);
                     }
                 }
-            });
+            }
+        });
 
         btnNext.addActionListener(this);
     }
@@ -105,10 +99,21 @@ public class BookingPage implements ActionListener {
             String selectedDay = (String) daysBox.getSelectedItem();
             String selectedDate = (String) datesBox.getSelectedItem();
             String selectedTime = (String) timeBox.getSelectedItem();
-            int adultQty = Integer.parseInt(peopleField.getText());
+            int adultQty = Integer.parseInt(adultsField.getText());
+            int childrenQty = Integer.parseInt(childrenField.getText());
+            double depositAmount;
+            try {
+                depositAmount = Double.parseDouble(depositField.getText());
+                if (depositAmount < 50) {
+                    JOptionPane.showMessageDialog(frame, "Deposit must be $50 or more.", "Invalid Deposit", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(frame, "Please enter a valid deposit amount.", "Invalid Deposit", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             frame.dispose();
-
-            new Receipt(selectedBookingType, selectedDay, selectedDate, selectedTime, adultQty);
+            new Receipt(selectedBookingType, selectedDay, selectedDate, selectedTime, adultQty, childrenQty, depositAmount);
         }
     }
 
